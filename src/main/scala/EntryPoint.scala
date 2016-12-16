@@ -4,6 +4,7 @@ object EntryPoint {
   import java.io.{File, IOException}
   import org.eclipse.jgit.api.Git
   import org.eclipse.jgit.api.errors.GitAPIException
+  import org.eclipse.jgit.revwalk.filter.RevFilter
   import scala.collection.JavaConverters._
 
   def main(args: Array[String]) = 
@@ -25,7 +26,7 @@ object EntryPoint {
         // Note: the call() returns an opened repository already which needs to be closed to avoid file handle leaks!
           println(s"Having repository: ${git.getRepository().getDirectory()}")
 
-          git.log()//.addPath("--merges")
+          git.log().setRevFilter(RevFilter.ONLY_MERGES)//.addPath("--merges")
             .call().asScala.foreach{ l => println(l.getShortMessage()) } 
         }
       case None => println("No repository specified.")
